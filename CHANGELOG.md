@@ -1,5 +1,32 @@
 # AWS Mobile SDK for iOS CHANGELOG
 
+## 2.4.11
+### New Features
+* **SDK Core**
+	* Introducing new AWS `USEast2` (Ohio) region, endpoint `us-east-2`. 
+    
+### Resolved Issues
+
+* **Amazon API Gateway**
+    * Fixed a URL encoding bug. [Github Issue 491](https://github.com/aws/aws-sdk-ios/issues/491)
+
+
+## 2.4.10
+### New Features
+* **Amazon API Gateway**
+	* Added support for a custom API invoker method with configurable HTTP parameters.
+* **Amazon Cognito Identity Provider**
+    * Added support for end user to set password and required attributes during initial authentication if they were created using AdminCreateUser. 
+    
+### Resolved Issues
+
+* **Amazon Cognito Identity Provider**
+    * Fixed a bug causing AWSCognitoIdentityUserPool.clearAll to not clear the keychain. [Github Issue #476](https://github.com/aws/aws-sdk-ios/issues/476)
+
+* **Amazon S3**
+    * Fixed a bug which disabled creating an empty folder. [Github Issue #480](https://github.com/aws/aws-sdk-ios/issues/480)
+    * Fixed a bug which did not set error object when bucket name is empty in request. [Github Issue #469](https://github.com/aws/aws-sdk-ios/issues/469)
+
 ## 2.4.9
 ### New Features
 * **All Services**
