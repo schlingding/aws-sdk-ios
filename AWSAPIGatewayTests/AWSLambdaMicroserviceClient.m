@@ -42,12 +42,6 @@
 
 @end
 
-@interface AWSLambdaMicroserviceClient()
-
-@property (nonatomic, strong) AWSServiceConfiguration *configuration;
-
-@end
-
 @interface AWSServiceConfiguration()
 
 @property (nonatomic, strong) AWSEndpoint *endpoint;
@@ -171,6 +165,26 @@ static AWSSynchronizedMutableDictionary *_serviceClients = nil;
                      responseClass:nil];
 }
 
-
+- (AWSTask *)testFunctionGet:(NSString *)key1 {
+    NSDictionary *headerParameters = @{
+                                       @"Content-Type": @"application/json",
+                                       @"Accept": @"application/json",
+                                       
+                                       };
+    NSDictionary *queryParameters = @{
+                                      @"key1": key1
+                                      };
+    NSDictionary *pathParameters = @{
+                                     
+                                     };
+    
+    return [self invokeHTTPRequest:@"GET"
+                         URLString:@"/TestFunction"
+                    pathParameters:pathParameters
+                   queryParameters:queryParameters
+                  headerParameters:headerParameters
+                              body:nil
+                     responseClass:nil];
+}
 
 @end

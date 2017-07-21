@@ -1,5 +1,270 @@
 # AWS Mobile SDK for iOS CHANGELOG
 
+## 2.5.9
+
+### Bug fixes
+
+* **Amazon Lex**
+  * Fixed bug where an application consuming `Lex` cannot be signed and distributed. [Github Issue #704](https://github.com/aws/aws-sdk-ios/issues/704). AWSResources folder is removed and the Media.xcassets folder is now present under AWSLex.framework in order to allow the application to be signed.
+
+* **Amazon Pinpoint**
+  * Fixed bug where saving a session cause a crash. [Github Issue #580](https://github.com/aws/aws-sdk-ios/issues/580)
+  * Removed all calls that blocked the main thread. [Github Issue #614](https://github.com/aws/aws-sdk-ios/issues/614)
+
+* **AWS IoT**
+  * Moved encoding and decoding MQTT packet into background thread
+  * Moved websocket delegate methods (webSocketDidOpen:, webSocket:didFailWithError:, webSocket:didReceiveMessage:, webSocket:didCloseWithCode: ) into background thread
+  * Fixed bug where app receives duplicate "Disconnected" callback when previously connected to AWS IoT via websocket
+  * Fixed bug where reconnect timer incorrectly triggered after user disconnects
+
+## 2.5.8
+
+### New Features
+* **Amazon Cognito Auth (Beta)**
+	* A new SDK that enables sign-up and sign-in for Amazon Cognito Your User Pools via a lightweight hosted ui.
+
+### Enhancements
+
+* **Amazon Pinpoint**
+	* Introduce `isApplicationLevelOptOut` block to `AWSPinpointConfiguration`. Use this to configure whether or not client should receive push notifications, at an application level.
+	
+### Bug fixes
+
+* **Amazon SNS**
+    * Fixed error parsing for service responses. **Note:** This change also fixes error response parsing for `AutoScaling`, `CloudWatch`, `ELB`, `SES`, `SimpleDB`, `SQS` and `STS`. [Github Issue #676](https://github.com/aws/aws-sdk-ios/issues/676) and [Github Issue #671](https://github.com/aws/aws-sdk-ios/issues/671)
+
+* **Amazon Cognito Identity Provider**
+	* Fixed crash with AWSCognitoIdentityUserPool.calculateSecretHash when username contained non ASCII characters. [Github Issue #679](https://github.com/aws/aws-sdk-ios/issues/679)
+
+### Misc changes
+
+* **AWS IoT**
+	* Deprecating default endpoint for AWSIoTDataService. Client should use custom endpoint when initializing AWSServiceConfiguration to be used for AWSIoTDataManager.
+
+## 2.5.7
+
+### Enhancements
+
+* **Amazon Polly**
+	* Added support for new voice id - `Vicki`.
+	
+### Bug fixes
+
+* **SDK Core**
+    * Fixed `LOG Macros` error. [Github Issue #664](https://github.com/aws/aws-sdk-ios/issues/664)
+    * Allow for future expired/unauthed token calls to properly refresh the aws token. [Github Issue #563](https://github.com/aws/aws-sdk-ios/pull/563/)
+* **AWS Lambda**
+    * Fixed clock skew retry handling bug. [Github Issue #673](https://github.com/aws/aws-sdk-ios/issues/673)
+    
+
+## 2.5.6
+
+### Enhancements
+
+* **AWS IoT**
+	* Updated AWS IoT to the latest API specifications.
+
+### Bug fixes
+* **Amazon S3**
+	* Fixed bug where file paths with spaces were not correctly handled and caused upload failures. [Github Issue #634](https://github.com/aws/aws-sdk-ios/issues/634)
+* **AWS IoT**
+    * Fixed bug where timer was not started on currentRunLoop.
+* **SDK Core**
+    * Remove definition of `LOG_LEVEL_DEF` for compatibility. [Github Issue #655](https://github.com/aws/aws-sdk-ios/issues/655)
+
+## 2.5.5
+
+### Bug fixes
+* **SDK Core**
+	* **Breaking API change** `doesAppRunInBackground` method is renamed to `awsDoesAppRunInBackground`. [GitHub Issue #643](https://github.com/aws/aws-sdk-ios/issues/643)
+
+* **AWS IoT**
+	* Fixed bug which caused crash when shadow timer timeout is called after shadow is unregistered. [Github Issue #640](https://github.com/aws/aws-sdk-ios/issues/640)
+
+## 2.5.4
+
+### New Features
+* **SDK Core**
+	* `AWSLogger` is now deprecated. Suggested to use `AWSDDLog` for logging; SDK now uses `CocoaLumberjack` for logging.
+
+### Enhancements
+* **Amazon Lex**
+	* Amazon Lex is now Generally Available.
+	* Added support for input transcripts.
+	
+* **Amazon Polly**
+	* Added support for requesting use of multiple Lexicons through `AWSPollySynthesizeSpeechURLBuilder`.
+	* Added support for speech marks.
+	
+* **Amazon Rekognition**
+	* Added support for moderation labels and age range estimation.
+
+## 2.5.3
+### New Features
+* **Amazon Cloud Watch Logs**
+	* Amazon CloudWatch is a monitoring service for AWS cloud resources and the applications you run on AWS. You can use Amazon CloudWatch to collect and track metrics, collect and monitor log files, and set alarms.
+
+### Resolved Issues
+* **SDK Core**
+	* Added support for BasicSessionCredentials Provider [GitHub Issue #561](https://github.com/aws/aws-sdk-ios/issues/561) 
+* **Amazon APIGateway**
+	* Support for Swift 3 in API Gateway code generation.
+	* Fixed Invalid bitcast AWSServiceConfiguration. [GitHub Issue #585](https://github.com/aws/aws-sdk-ios/issues/585)
+* **Amazon S3**
+	* Fixed issues which might cause compilation erros when using the SDK with C++ runtimes. [GitHub issue #613](https://github.com/aws/aws-sdk-ios/issues/613)
+	* Fixed crash when uploading file that does not exist through `AWSTransferUtility `. [GitHub issue #618](https://github.com/aws/aws-sdk-ios/issues/618)
+* **Amazon Cognito Identity Provider**
+	* Fixed a bug in which the User Confirmation status was not getting set correctly in the sdk.
+### Enhancements
+* **Amazon Lex - beta**
+	* Use different images for `LexVoiceButton` to distinguish between when playing audio response vs when listening to audio.
+
+
+## 2.5.2
+### New Features
+* **AWS KMS**
+    *  AWS Key Management Service (KMS) is a managed service that makes it easy for you to create and control the encryption keys used to encrypt your data, and uses Hardware Security Modules (HSMs) to protect the security of your keys. AWS Key Management Service is integrated with several other AWS services to help you protect the data you store with these services. AWS Key Management Service is also integrated with AWS CloudTrail to provide you with logs of all key usage to help meet your regulatory and compliance needs.
+
+### Breaking API Changes
+* **Amazon Cognito Identity Provider**
+	* Changed `AWSCognitoIdentityProviderSchemaAttributeType` property from `mutable` to `varying` for compatibility when used with C++. [Github Issue #597](https://github.com/aws/aws-sdk-ios/issues/597)
+
+### Resolved Issues
+* **SDK Core**
+	* Fixed invalid chunk data signature. [Github Issue #592](https://github.com/aws/aws-sdk-ios/issues/592)
+	* Added us-east-2, eu-west-2, and ca-central-1 regions to `aws_regionTypeValue`.
+*  **Amazon Cognito Identity Provider**
+	*  Fixed bug which caused `deleteAttributes` to not delete the attributes specified by caller. The method no longer causes user logout.
+	*  Improved reliability of `registerDevice:deviceToken` with reduced `NotAuthorizedException` occurances.
+*  **Amazon Cognito Sync**
+	*  Fixed bug which caused possible deadlock during `synchronize` call.
+*  **Amazon Lex - beta**
+	*  Added support to switch between audio outputs during conversation.
+	*  Removed unnecessary header search path in AWSLex.podspec.
+* **AWS IoT**
+	* Fixed bug which caused shadow timer to not expire shadow operation. [Github Pull Request #601](https://github.com/aws/aws-sdk-ios/pull/601) [Github Issue #565](https://github.com/aws/aws-sdk-ios/issues/565)
+
+### Enhancements
+* **Amazon Cognito Identity Provider**
+	* Added more error logging.
+* **AWS IoT**
+	* Added more error logging and missing `NSURLNetworkServiceTypeCallSignaling` case handling.
+* **AWS STS**
+	* Updated STS to the latest API specifications.
+* **Amazon S3**
+	* Updated S3 to the latest API specifications.
+
+## 2.5.1
+### Resolved Issues
+* **SDK Core**
+	* Fix namespace collision with Bolts framework. [Github Issue #572](https://github.com/aws/aws-sdk-ios/issues/572)
+	* Fix a bug which caused bad memory access when no data is read from stream [Github Pull Request #582](https://github.com/aws/aws-sdk-ios/pull/582) [Github Issue #586](https://github.com/aws/aws-sdk-ios/issues/586)
+* **Amazon Lex - Beta**
+	* Fix a bug which cutoff beginning of audio stream.
+	* Fix a bug which caused bad memory access during race conditions when in voice mode.
+
+## 2.5.0
+### General Updates
+* **All Services**
+	* Swift 3 documentation and naming definitions added. The naming definitions will affect all Swift users by changing method names. Please refer to the [blog](https://aws.amazon.com/blogs/mobile/aws-mobile-sdk-for-ios-version-2-5-0-improvements-and-changes-to-swift-support/) for more details on changes and how to upgrade from 2.4.X to 2.5.X.
+* **SDK Core**
+	* For Swift, `AWSRegionType` and `AWSServiceType` enums do not follow the convention that uses lowercase at the beginning. Example: `.USEast1` and `.DynamoDB`
+* **Updated AWSTask**
+	* AWSTask has been updated to the latest version of the Bolts framework.
+
+### Breaking API Changes
+* **SDK Core**
+	* **AWSTask** no longer has `exception` property and affiliated methods due to Bolts update. This means that AWSTask will not handle exceptions and they will be thrown.
+	* **AWSCredentialsProvider**
+		* Removed deprecated property`login`. Please use `AWSIdentityProviderManager` to provide a valid logins dictionary to the credentials provider.
+		* Removed deprecated method `initWithRegionType:identityId:identityPoolId:logins:`. Please use `initWithRegionType:identityPoolId:identityProviderManager:`.
+		* Removed deprecated method `initWithRegionType:identityId:accountId:identityPoolId:unauthRoleArn:authRoleArn:logins:`. Please use `initWithRegionType:identityPoolId:unauthRoleArn:authRoleArn:identityProviderManager:`.
+	* **AWSIdentityProvider**
+		* Removed deprecated enum `AWSCognitoLoginProviderKey`.
+		* `AWSCognitoCredentialsProviderHelperErrorType` enum entries changed to conform to convention.
+			* Please use `AWSCognitoCredentialsProviderHelperErrorTypeIdentityIsNil` instead of `AWSCognitoCredentialsProviderHelperErrorIdentityIsNil`.
+			* Please use `AWSCognitoCredentialsProviderHelperErrorTypeTokenRefreshTimeout` instead of `AWSCognitoCredentialsProviderHelperErrorTokenRefreshTimeout`.
+* **Amazon S3**
+	* **AWSS3TransferUtility** parameter name `completionHander` corrected to `completionHandler`. Afffected methods are `uploadData:bucket:key:contentType:expression:completionHander:`, `uploadFile:bucket:key:contentType:expression:completionHander:`, `downloadDataFromBucket:key:expression:completionHander:`, and `downloadToURL:bucket:key:expression:completionHander:`.
+* **Amazon Cognito**
+	* **AWSCognitoIdentityUser**
+		* Removed deprecated method `getSession:password:validationData:scopes:`. Please use `getSession:password:validationData`.
+		* Removed deprecated method `getSession:`. Please use `getSession` (no parameters).
+* **AWS IoT**
+	* **AWSIoTDataManager**
+		* Removed deprecated method `publishString:onTopic:`. Please use `publishString:onTopic:QoS:`.
+		* Removed deprecated method `publishString:qos:onTopic:`. Please use `publishString:onTopic:QoS:`.
+		* Removed deprecated method `publishData:onTopic`. Please use `publishData:onTopic:QoS:`.
+		* Removed deprecated method `publishData:qos:onTopic`. Please use `publishData:onTopic:QoS:`.
+		* Removed deprecated method `subscribeToTopic:qos:messageCallback`. Please use `registerWithShadow:eventCallback`.
+* **AWS IoT, Amazon DynamoDB, Amazon Cognito**
+	* Type parameters specified for generic types where applicable.
+
+### Resolved Issues
+* **SDK Core**
+	* Fix bug related to URL encoding [Github Issue 442](https://github.com/aws/aws-sdk-ios/issues/442)
+* **Amazon Cognito Sync**
+	* Fix and repair datasets stuck with "No such SyncCount" errors during synchronize.
+
+## 2.4.16
+### New Features
+* **SDK Core**
+	* Introducing new AWS `EUWest2` - Europe (London) region, endpoint `eu-west-2`. 
+
+* **Amazon Rekognition**
+	* Amazon Rekognition is a service that makes it easy to add image analysis to your applications. With Rekognition, you can detect objects, scenes, and faces in images. You can also search and compare faces. Rekognition’s API enables you to quickly add sophisticated deep learning-based visual search and image classification to your applications.
+	
+### Misc. Updates
+
+* **Amazon SQS**
+ 	* Update SQS client to latest service model.
+
+## 2.4.15
+### New Features
+* **SDK Core**
+	* Introducing new AWS `CACentral1` - Canada (Central) region, endpoint `ca-central-1`. 
+    
+### Resolved Issues
+
+* **Amazon Pinpoint**
+    *  Fix bugs related to session timeout and campaign opens analytics.
+
+## 2.4.14
+### New Features
+* **Amazon Pinpoint**
+	* Amazon Pinpoint makes it easy to run targeted campaigns to improve user engagement. Pinpoint helps you understand your users behavior, define who to target, what messages to send, when to deliver them, and tracks the results of the campaigns.
+	
+
+## 2.4.13
+### New Features
+* **Amazon Polly**
+    *  Amazon Polly is a service that turns text into lifelike speech, making it easy to develop applications that use high-quality speech to increase engagement and accessibility. With Amazon Polly the developers can build speech-enabled apps that work in multiple geographies.
+* **Amazon Lex - Beta**
+    * Amazon Lex is a service for building conversational interactions into any application using voice and text. With Lex, the same conversational engine that powers Amazon Alexa is now available to any developer, enabling you to build sophisticated, natural language, conversational bots (chatbots) into your new and existing applications. Amazon Lex provides the deep functionality and flexibility of automatic speech recognition (ASR) for converting speech to text and natural language understanding (NLU) to understand the intent of the text. This allows you to build highly engaging user experiences with lifelike, conversational interactions.     
+    
+### Resolved Issues
+
+* **Amazon Mobile Analytics**
+    * Do not allow empty keys for attributes or metrics.
+
+
+## 2.4.12
+### New Features
+* **Amazon Mobile Analytics**
+	*  Added support for setting custom max keystorage size. [Github Issue 500](https://github.com/aws/aws-sdk-ios/issues/500)
+	
+### Resolved Issues
+
+* **Amazon API Gateway**
+    * Fixed a URL encoding bug. [Github Issue 505](https://github.com/aws/aws-sdk-ios/issues/505)
+* **Amazon S3 TransferUtility**
+    * Added fix for timeout based on configuration.    
+* **Amazon Cognito Identity**
+    * Fix issue causing SDK to call getOpenIdToken even with useEnhancedFlow set to YES
+    * Fix issue introduced in 2.4.0 causing credentials to be refreshed on every AWS service call even when they were still valid
+* **Amazon Cognito Sync**
+    * Fix issue causing synchronize() to fail with "Mismatch between session identity id and request identity id" on the first sync with Developer Authenticated Identities and in other scenarios
+
 ## 2.4.11
 ### New Features
 * **SDK Core**

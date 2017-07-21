@@ -1,5 +1,5 @@
 //
-// Copyright 2014-2016 Amazon.com,
+// Copyright 2014-2017 Amazon.com,
 // Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Amazon Software License (the "License").
@@ -42,12 +42,48 @@ static const NSString * AWSCognitoIdentityUserPoolCurrentUser = @"currentUser";
 @implementation AWSCognitoIdentityUserPool
 
 static AWSSynchronizedMutableDictionary *_serviceClients = nil;
+static NSString *const AWSInfoCognitoUserPool = @"CognitoUserPool";
+static NSString *const AWSCognitoUserPoolId = @"CognitoUserPoolId";
+static NSString *const AWSCognitoUserPoolAppClientId = @"CognitoUserPoolAppClientId";
+static NSString *const AWSCognitoUserPoolAppClientSecret = @"CognitoUserPoolAppClientSecret";
 
 + (void)loadCategories {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         awsbigint_loadBigInt();
     });
+}
+
++ (instancetype)defaultCognitoIdentityUserPool {
+    static AWSCognitoIdentityUserPool *_defaultUserPool = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AWSServiceConfiguration *serviceConfiguration = nil;
+        AWSServiceInfo *serviceInfo = [[AWSInfo defaultAWSInfo] defaultServiceInfo:AWSInfoCognitoUserPool];
+        
+        if (serviceInfo) {
+            serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:serviceInfo.region
+                                                               credentialsProvider:nil];
+        }
+        
+        NSString *poolId = [serviceInfo.infoDictionary objectForKey:AWSCognitoUserPoolId];
+        NSString *clientId = [serviceInfo.infoDictionary objectForKey:AWSCognitoUserPoolAppClientId];
+        NSString *clientSecret = [serviceInfo.infoDictionary objectForKey:AWSCognitoUserPoolAppClientSecret];
+        
+        if (poolId && clientId && clientSecret) {
+            AWSCognitoIdentityUserPoolConfiguration *configuration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:clientId
+                                                                                                                          clientSecret:clientSecret
+                                                                                                                                poolId:poolId];
+            _defaultUserPool = [[AWSCognitoIdentityUserPool alloc] initWithConfiguration:serviceConfiguration
+                                                                   userPoolConfiguration:configuration];
+        } else {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"The service configuration is `nil`. You need to configure `Info.plist` before using this method."
+                                         userInfo:nil];
+        }
+    });
+    
+    return _defaultUserPool;
 }
 
 + (void)registerCognitoIdentityUserPoolWithUserPoolConfiguration:(AWSCognitoIdentityUserPoolConfiguration *)userPoolConfiguration
@@ -211,7 +247,7 @@ static AWSSynchronizedMutableDictionary *_serviceClients = nil;
         return nil;
 
     const char *cKey  = [self.userPoolConfiguration.clientSecret cStringUsingEncoding:NSASCIIStringEncoding];
-    const char *cData = [[userName stringByAppendingString:self.userPoolConfiguration.clientId] cStringUsingEncoding:NSASCIIStringEncoding];
+    const char *cData = [[userName stringByAppendingString:self.userPoolConfiguration.clientId] cStringUsingEncoding:NSUTF8StringEncoding];
 
     unsigned char cHMAC[CC_SHA256_DIGEST_LENGTH];
 

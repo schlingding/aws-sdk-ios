@@ -1,5 +1,5 @@
 //
-// Copyright 2014-2016 Amazon.com,
+// Copyright 2014-2017 Amazon.com,
 // Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Amazon Software License (the "License").
@@ -47,6 +47,13 @@ NS_ASSUME_NONNULL_BEGIN
  Set this delegate to interactively prompt users for authentication challenges when necessary
  */
 @property (nonatomic, strong) id <AWSCognitoIdentityInteractiveAuthenticationDelegate> delegate;
+
+/**
+ *  Fetches the Cognito User Pool instance configured in the `info.plist` under `CognitoUserPool`
+ *
+ *  @return the default instance for Cognito User Pool
+ */
++ (instancetype)defaultCognitoIdentityUserPool;
 
 + (void)registerCognitoIdentityUserPoolWithUserPoolConfiguration:(AWSCognitoIdentityUserPoolConfiguration *)userPoolConfiguration
                                                           forKey:(NSString *)key;
